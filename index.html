@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+#canvas,#canvas2{
+	border:1px solid #ccc;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-250px;
+	margin-left:-300px;
+}
+</style>
+</head>
+
+<body>
+<canvas id="canvas" width="600" height="500">
+
+</canvas>
+<canvas id="canvas2" width="600" height="500">
+
+</canvas>
+
+<script>
+var can=document.getElementById("canvas");
+var ctx=can.getContext("2d");
+var grd=ctx.createRadialGradient(200,200,80,200,200,200);
+ctx.beginPath();
+grd.addColorStop(0,"#fff");
+grd.addColorStop(1,"#07BEEA");
+ctx.arc(200,200,200,0,2*Math.PI);
+ctx.lineWidth=2;
+ctx.strokeStyle="#999";
+ctx.fillStyle=grd;
+ctx.closePath();
+ctx.stroke();
+ctx.fill();
+ctx.beginPath();
+ctx.arc(200,215,160,0,2*Math.PI);
+ctx.fillStyle="#FFF";
+ctx.closePath();
+ctx.stroke();
+ctx.fill();
+//鼻子
+ctx.beginPath();
+ctx.arc(200,145,18,0,2*Math.PI);
+var grd2=ctx.createRadialGradient(208,140,2,200,148,18);
+grd2.addColorStop(0,"#fff");
+grd2.addColorStop(1,"#C93E00");
+ctx.fillStyle=grd2;
+ctx.closePath();
+ctx.stroke();
+ctx.fill();
+ctx.beginPath();
+ctx.lineWidth=1;
+ctx.moveTo(200,163);
+ctx.lineTo(200,308);
+ctx.closePath();
+ctx.stroke();
+//眼睛
+ctx.beginPath();
+ctx.arc(160,60,40,0,1*Math.PI,true);
+ctx.fillStyle="#fff";
+ctx.lineWidth=2;
+ctx.stroke();
+ctx.fill();
+ctx.beginPath();
+ctx.arc(240,60,40,0,1*Math.PI,true);
+ctx.stroke();
+ctx.fill();
+ctx.beginPath();
+ctx.arc(160,100,40,0,1*Math.PI,false);
+ctx.stroke();
+ctx.fill();
+ctx.beginPath();
+ctx.arc(240,100,40,0,1*Math.PI,false);
+ctx.stroke();
+ctx.fill();
+ctx.beginPath();
+ctx.rect(120,60,160,40);
+ctx.fill();
+ctx.beginPath();
+ctx.lineWidth=1;
+ctx.moveTo(119,60);
+ctx.lineTo(119,100);
+ctx.closePath();
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(200,60);
+ctx.lineTo(200,100);
+ctx.closePath();
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(281,60);
+ctx.lineTo(281,100);
+ctx.closePath();
+ctx.stroke();
+//眼珠
+ctx.beginPath();
+ctx.arc(175,110,12,0,2*Math.PI,true);
+ctx.fillStyle="#000";
+ctx.fill();
+ctx.beginPath();
+ctx.arc(225,110,12,0,2*Math.PI,true);
+ctx.fillStyle="#000";
+ctx.fill();
+//嘴巴
+ctx.beginPath();
+ctx.arc(200,145,163,0.22*Math.PI,0.78*Math.PI);
+ctx.fillStyle="#fff";
+ctx.stroke();
+//胡须
+ctx.moveTo(75,145);
+ctx.lineTo(165,170);
+ctx.moveTo(65,190);
+ctx.lineTo(165,190);
+ctx.moveTo(65,230);
+ctx.lineTo(165,210);
+ctx.moveTo(325,145);
+ctx.lineTo(235,170);
+ctx.moveTo(335,190);
+ctx.lineTo(235,190);
+ctx.moveTo(335,230);
+ctx.lineTo(235,210);
+ctx.stroke();
+//写字
+ctx.font="bold 30px 宋体";
+ctx.fillStyle="#07BEEA";
+//ctx.
+ctx.fillText("哆啦A梦",450,100);
+
+
+//画时钟
+var can=document.getElementById("canvas2");
+var ctx=can.getContext("2d");
+var r=200;//半径为150
+var age1=6*Math.PI/180;//分钟 秒钟转动的度数
+var age2=30*Math.PI/180;//小时  转动的度数
+var color="#333";
+var color2="#999"
+ctx.translate(200,200);
+//时刻的刻度
+function hour(){
+	ctx.beginPath();
+	ctx.strokeStyle=color2;
+	ctx.lineWidth=2;
+	ctx.moveTo(0,-(r-5));
+	ctx.lineTo(0,-(r-20));
+	ctx.rotate(age2);
+	ctx.closePath();
+	ctx.stroke();
+}
+//分钟的刻度
+function minute(){
+	ctx.beginPath();
+	ctx.lineWidth=1;
+	ctx.strokeStyle=color2;
+	ctx.moveTo(0,-(r-5));
+	ctx.lineTo(0,-(r-15));
+	ctx.rotate(age1);
+	ctx.closePath();
+	ctx.stroke();	
+}
+//时钟刻度值
+function timeText(){
+	ctx.save();
+	ctx.beginPath();
+	ctx.fillStyle=color2;
+	ctx.font="20px 黑体";
+	ctx.textAlign="center";
+	ctx.textBaseline="middle";
+	for(var i=1;i<=12;i++){
+		//Math.sin(x) x传值为弧度
+		var xPos=(r-30)*Math.sin(30*Math.PI/180*i);
+		var yPos=-(r-30)*Math.cos(30*Math.PI/180*i);
+        ctx.fillText(i,xPos,yPos);
+    }
+	ctx.closePath();
+	ctx.restore();
+}
+//画指针
+function drawLine(w,x1,y1,x2,y2,t){
+	ctx.save();
+	ctx.beginPath();
+	ctx.strokeStyle=color;
+	ctx.lineWidth=w;
+	ctx.rotate(age1*t);
+	ctx.moveTo(x1,y1);
+	ctx.lineTo(x2,y2);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.restore();
+}
+function drawTime(){
+	var day=new Date();
+	var h=day.getHours();
+	var m=day.getMinutes();
+	var s=day.getSeconds();
+	m+=s/60;
+	h+=h/60;
+	var num=r+5;
+	ctx.clearRect(-num,-num,2*num,2*num);
+	for(var i=0;i<12;i++){
+      hour();
+    }
+	for(var i=0;i<60;i++){
+      minute();
+    }
+	timeText();
+	//时钟 70
+	drawLine(5,0,10,0,-(r-90),h*5);
+	//分钟 90
+	drawLine(3,0,10,0,-(r-70),m);
+	//秒钟 110
+	drawLine(1,0,10,0,-(r-50),s);
+}
+drawTime();
+setInterval(function(){
+	drawTime();
+},1000)
+</script>
+</body>
+</html>
+
